@@ -1,0 +1,25 @@
+{
+  "intents": [
+    {
+      "intent": "VrtPlaylistOnairCurrentSongStubru"
+    },
+    {
+      "intent": "VrtPlaylistOnairCurrentSongRadioOne"
+    },
+    {
+      "intent": "VrtPlaylistOnairCurrentSongRadioTwo"
+    },
+    {
+      "intent": "VrtPlaylistOnairCurrentSongKlara"
+    },
+    {
+      "intent": "VrtPlaylistOnairCurrentSongMnm"
+    },
+    {
+      "intent": "AMAZON.PauseIntent"
+    },
+    {
+      "intent": "AMAZON.ResumeIntent"
+    }
+  ]
+}

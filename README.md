@@ -1,16 +1,24 @@
 # alexa-vrt-radio-playlist
 
+## Info
 During a Hackathon on the VRT (Flemish Radio and Television Broadcasting Organization)
 
 We created an Amazon Alexa NodeJS Skill.
 
-We started the development with the following resources.
-1. [Alexa Integrate Skills with Alexa Lists Sample Project](#MyStartResource1)
-2. [Build An Alexa Fact Skill](#MyStartResource2)
-3. [httpsGet](#MyStartResource3)
+The purpose was to create a skill that returns the CURRENT song, artist and composer
+of a Radio station.
 
-@todo
+```bash
+Alexa ask GIJOE what is the current song on studio brussels.
+```
 
+1. We started the development with the following resources.
+  * [Alexa Integrate Skills with Alexa Lists Sample Project](#MyStartResource1)
+  * [Build An Alexa Fact Skill](#MyStartResource2)
+  * [httpsGet](#MyStartResource3)
+2. Created an Alexa Amazon Skill (The name of the skill "VRT Hackathon GIJOE)
+3. Created an AWS NodeJS Lambda (To fetch the VRT service)
+4. Created a local development environment.
 
 
 ## Install
@@ -39,11 +47,21 @@ npm install aws-sdk --save
 
 ## Try Skill
 ### Echosim
-@todo
-1. Login developer account of Amazon.
+1. Create a Alexa Amazon Skill with this NodeJS file OR ask me to send you an invite to test the "VRT Hackathon GIJOE"-skill.
+2. Login developer account of Amazon.
+3. Try the following commands.
+```bash
+Alexa ask GIJOE what is the current song on studio brussels.
+Alexa ask GIJOE what is the current song on radio1.
+Alexa ask GIJOE what is the current song on radio2.
+Alexa ask GIJOE what is the current song on klara.
+Alexa ask GIJOE what is the current song on mnm.
+```
 
 ### Local
-Run following command in root of the repo.
+The RequestCurrentSong.json file has test-data that request info about the current song of the "MNM"-Radio Station.
+
+1. Run following command in root of the repo.
 ```bash
 node test/main.js
 ```

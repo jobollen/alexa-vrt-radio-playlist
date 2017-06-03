@@ -2,15 +2,22 @@
 
 During a Hackathon on the VRT (Flemish Radio and Television Broadcasting Organization)
 
-I created an Amazon Alexa NodeJS Skill.
+We created an Amazon Alexa NodeJS Skill.
 
-I started the development with the following resources.
+We started the development with the following resources.
 1. [Alexa Integrate Skills with Alexa Lists Sample Project](#MyStartResource1)
 2. [Build An Alexa Fact Skill](#MyStartResource2)
 3. [httpsGet](#MyStartResource3)
 
+@todo
+
+
+
 ## Install
-### Mac OS X
+### On local machine
+#### Mac OS X
+1. Download de repo.
+2. Run following commands in the repo
 ```bash
 cd src
 npm install alexa-sdk --save
@@ -19,6 +26,29 @@ npm install alexa-sdk --save
 cd test
 npm install aws-sdk --save
 ```
+
+### On console.aws.amazon.com
+@todo
+1. Create account/Login.
+
+### On developer.amazon.com
+@todo
+1. Create account/Login.
+
+
+
+## Try Skill
+### Echosim
+@todo
+1. Login developer account of Amazon.
+
+### Local
+Run following command in root of the repo.
+```bash
+node test/main.js
+```
+
+
 
 ## Resources
 The links below will help you get started building skills for Alexa.

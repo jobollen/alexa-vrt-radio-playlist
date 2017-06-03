@@ -1,0 +1,24 @@
+{
+	"session": {
+		"sessionId": "SessionId.bd765626-e598-48ed-959e-65f54f9f1c09",
+		"application": {
+			"applicationId": "amzn1.ask.skill.123"
+		},
+		"attributes": {},
+		"user": {
+			"userId": "amzn1.ask.account.123"
+		},
+		"new": true
+	},
+	"request": {
+		"type": "IntentRequest",
+		"requestId": "EdwRequestId.0a09376d-9ef4-4e42-9f1f-794fc6552a4e",
+		"locale": "en-US",
+		"timestamp": "2017-06-03T02:33:50Z",
+		"intent": {
+			"name": "VrtPlaylistOnairCurrentSongMnm",
+			"slots": {}
+		}
+	},
+	"version": "1.0"
+}

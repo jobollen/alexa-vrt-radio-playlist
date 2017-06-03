@@ -1,4 +1,5 @@
 .DS_Store
 .idea
 .editorconfig
+src/node_modules/
 test/

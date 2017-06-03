@@ -12,8 +12,7 @@
 
 const Alexa = require('alexa-sdk');
 
-//const APP_ID = 'amzn1.ask.skill.75d111fd-ae4e-44c1-8645-65fdd20328ab';  // TODO replace with your app ID (OPTIONAL).
-const APP_ID = 'amzn1.echo-sdk-ams.app.amzn1.ask.skill.75d111fd-ae4e-44c1-8645-65fdd20328ab';
+const APP_ID = '';  // TODO replace with your app ID (OPTIONAL).';
 
 // 1. Text strings =====================================================================================================
 //    Modify these strings and messages to change the behavior of your Lambda function

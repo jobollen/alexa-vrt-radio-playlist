@@ -1,6 +1,10 @@
 # alexa-vrt-radio-playlist
 
-I started with
+During a Hackathon on the VRT (Flemish Radio and Television Broadcasting Organization)
+
+I created an Amazon Alexa NodeJS Skill.
+
+I started the development with the following resources.
 1. [Alexa Integrate Skills with Alexa Lists Sample Project](#MyStartResource1)
 2. [Build An Alexa Fact Skill](#MyStartResource2)
 3. [httpsGet](#MyStartResource3)
@@ -11,9 +15,13 @@ I started with
 cd src
 npm install alexa-sdk --save
 ```
+```bash
+cd test
+npm install aws-sdk --save
+```
 
 ## Resources
-How I started. The links below will help you get started building skills for Alexa.
+The links below will help you get started building skills for Alexa.
 ### Github
 * Alexa
   * [Alexa cookbook](https://github.com/alexa/alexa-cookbook)

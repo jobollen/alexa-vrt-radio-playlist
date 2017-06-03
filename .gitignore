@@ -3,3 +3,4 @@
 .editorconfig
 src/node_modules/
 test/
+test/node_modules/

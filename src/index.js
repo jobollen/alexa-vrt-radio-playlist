@@ -12,36 +12,36 @@
 
 const Alexa = require('alexa-sdk');
 
-//const APP_ID = '';  // TODO replace with your app ID (OPTIONAL).';
+const APP_ID = '';  // TODO replace with your app ID (OPTIONAL).';
 
 // 1. Text strings =====================================================================================================
 //    Modify these strings and messages to change the behavior of your Lambda function
 
-const RadioChannel = {
+const vrtRadioChannels = {
   'mnm'   : {
     'code': 55,
     'speech': 'M and M',
-    'values': ['mnm', 'm and m'],
+    'value': ['mnm', 'm and m'],
   },
   'stubru': {
     'code': 41,
     'speech': 'Studio Brussels',
-    'values': ['stubru', 'studio brussels'],
+    'value': ['stubru', 'studio brussels'],
   },
   'klara' : {
     'code': 31,
     'speech': 'Klara',
-    'values': ['klara'],
+    'value': ['klara'],
   },
   'radio2': {
     'code': 21,
     'speech': 'Radio Two',
-    'values': ['radio2', 'radio two'],
+    'value': ['radio2', 'radio two'],
   },
   'radio1': {
     'code': 11,
     'speech': 'Radio One',
-    'values': ['radio1', 'radio one'],
+    'value': ['radio1', 'radio one'],
   },
 };
 
@@ -167,47 +167,52 @@ const handlers = {
   'GetLatestSongMnmIntent': function () {
     var _this = this;
     var myRequest = {
-      'channel': RadioChannel.mnm,
-      'onairType': 'latest' // now, previous, latest.
+      'channel': vrtRadioChannels.mnm,
+      'onairType': 'latest', // current, previous, latest.
+      'filter': 'song', // song, artist, composer, all.
     };
 
-    httpsGetPlaylistOnair(myRequest, handlePlaylistOnair, _this);
+    httpsVrtGetPlaylistOnair(myRequest, handleVrtPlaylistOnair, _this);
   },
   'GetLatestSongStubruIntent': function () {
     var _this = this;
     var myRequest = {
-      'channel': RadioChannel.stubru,
-      'onairType': 'latest' // now, previous, latest.
+      'channel': vrtRadioChannels.stubru,
+      'onairType': 'latest', // current, previous, latest.
+      'filter': 'song', // song, artist, composer, all.
     };
 
-    httpsGetPlaylistOnair(myRequest, handlePlaylistOnair, _this);
+    httpsVrtGetPlaylistOnair(myRequest, handleVrtPlaylistOnair, _this);
   },
   'GetLatestSongKlaraIntent': function () {
     var _this = this;
     var myRequest = {
-      'channel': RadioChannel.klara,
-      'onairType': 'latest' // now, previous, latest.
+      'channel': vrtRadioChannels.klara,
+      'onairType': 'latest', // current, previous, latest.
+      'filter': 'song', // song, artist, composer, all.
     };
 
-    httpsGetPlaylistOnair(myRequest, handlePlaylistOnair, _this);
+    httpsVrtGetPlaylistOnair(myRequest, handleVrtPlaylistOnair, _this);
   },
   'GetLatestSongRadioOneIntent': function () {
     var _this     = this;
     var myRequest = {
-      'channel': RadioChannel.radio1,
-      'onairType': 'latest' // now, previous, latest.
+      'channel': vrtRadioChannels.radio1,
+      'onairType': 'latest', // current, previous, latest.
+      'filter': 'song', // song, artist, composer, all.
     };
 
-    httpsGetPlaylistOnair(myRequest, handlePlaylistOnair, _this);
+    httpsVrtGetPlaylistOnair(myRequest, handleVrtPlaylistOnair, _this);
   },
   'GetLatestSongRadioTwoIntent': function () {
     var _this = this;
     var myRequest = {
-      'channel': RadioChannel.radio2,
-      'onairType': 'latest' // now, previous, latest.
+      'channel': vrtRadioChannels.radio2,
+      'onairType': 'latest', // current, previous, latest.
+      'filter': 'song', // song, artist, composer, all.
     };
 
-    httpsGetPlaylistOnair(myRequest, handlePlaylistOnair, _this);
+    httpsVrtGetPlaylistOnair(myRequest, handleVrtPlaylistOnair, _this);
   },
   'GetFact': function () {
     // Get a random space fact from the space facts list
@@ -240,21 +245,33 @@ var https = require('https');
 
 // 3.2. Helper Callback functions ======================================================================================
 
-var handlePlaylistOnair = function(onairData, myRequest, handlerObject) {
-  var onairSong = getOnairSong(onairData, myRequest.onairType);
+var handleVrtPlaylistOnair = function(onairData, myRequest, handlerObject) {
+  var onairSong = getVrtOnairSong(onairData, myRequest.onairType);
+  var speechVars = getSpeechVarsVrtOnairSong(myRequest, onairSong);
   var myResult = {
     'req': myRequest,
     'res': {
       'song': onairSong,
+      'speechVars': speechVars,
     }
   };
+  var speechOutput = getSpeechOutput(myResult);
 
-  saySong(myResult, handlerObject);
+  // Logging.
+  console.log('\n--- handleVrtPlaylistOnair START ---');
+  console.log('1. The onairData from the PlaylistOnair Service (stringified)\n\n\t' + JSON.stringify(JSON.parse(onairData)));
+  console.log('\n2. The request of the resultData (Stringified)\n\n\t' + JSON.stringify(myResult.req));
+  console.log('\n3. The response of the resultData (Stringified)\n\n\t' + JSON.stringify(myResult.res));
+  console.log('\n4. SpeechOutput: ' + speechOutput);
+  console.log('--- handleVrtPlaylistOnair END ---\n');
+
+  // Tell Alexa what to emit.
+  handlerObject.emit(':tellWithCard', speechOutput, 'VRT Playlist onair of ' + myRequest.channel.value[0], speechOutput);
 };
 
 // 3.3. Helper functions ================================================================================================
 
-function httpsGetPlaylistOnair(myRequest, callback, handlerObject) {
+function httpsVrtGetPlaylistOnair(myRequest, callback, handlerObject) {
   var onairData = "";
 
   // Add filter to request.
@@ -273,20 +290,20 @@ function httpsGetPlaylistOnair(myRequest, callback, handlerObject) {
   req.end();
 };
 
-function getOnairSong(onairData, requestedOnairType) {
+function getVrtOnairSong(onairData, requestedOnairType) {
   var onairDataJson = JSON.parse(onairData);
   var onairSong = {};
 
-  if (requestedOnairType.toLowerCase() == 'now') {
-    onairSong = getSong(onairDataJson, 'NOW');
+  if (requestedOnairType.toLowerCase() == 'current') {
+    onairSong = getVrtOnairSongByType(onairDataJson, 'NOW');
   }
   else if (requestedOnairType.toLowerCase() == 'previous') {
-    onairSong = getSong(onairDataJson, 'PREVIOUS');
+    onairSong = getVrtOnairSongByType(onairDataJson, 'PREVIOUS');
   }
   else if (requestedOnairType.toLowerCase() == 'latest') {
-    onairSong = getSong(onairDataJson, 'NOW');
+    onairSong = getVrtOnairSongByType(onairDataJson, 'NOW');
     if (Object.keys(onairSong).length === 0 && onairSong.constructor === Object) {
-      onairSong = getSong(onairDataJson, 'PREVIOUS');
+      onairSong = getVrtOnairSongByType(onairDataJson, 'PREVIOUS');
     }
   }
   else {
@@ -296,7 +313,7 @@ function getOnairSong(onairData, requestedOnairType) {
   return onairSong;
 }
 
-function getSong(onairDataJson, onairType) {
+function getVrtOnairSongByType(onairDataJson, onairType) {
   var onairSong = {};
   onairDataJson.onairs.forEach(function(element){
     if(element.onairType == onairType) {
@@ -307,40 +324,18 @@ function getSong(onairDataJson, onairType) {
   return onairSong;
 }
 
-function saySong(myResult, handlerObject) {
-  // Init vars.
-  var speechOutput = '';
-  var speechVars = sanitizeVarsSaySong(myResult);
-
-  // Prepare speechOutput
-  speechOutput += 'On ' + speechVars.reqChannel + '. ';
-  speechOutput += 'The ' + speechVars.reqOnairType + ' song is ' + speechVars.title + '. ';
-  speechOutput += 'The artist is ' + speechVars.artist + '. ';
-  speechOutput += 'The composer is ' +  speechVars.composer + '.';
-
-  console.log('\n--- SaySong START ---');
-  console.log("Request data\n\t" + JSON.stringify(myResult.req));
-  console.log("\nResponse data\n\t" + JSON.stringify(myResult.res));
-  console.log("\nSpeechOutput\n\t" + speechOutput);
-  console.log('--- SaySong END ---');
-
-  // Tell Alexa what to emit.
-  handlerObject.emit(':tellWithCard', speechOutput, 'Playlist onair of MNM', speechOutput);
-}
-
-function sanitizeVarsSaySong(myResult) {
-  var song = myResult.res.song;
+function getSpeechVarsVrtOnairSong(myRequest, onairSong) {
   var speechVars = {
     'title': 'Not available',
     'artist': 'Not available',
     'composer': 'Not available',
-    'reqChannel': myResult.req.channel.speech,
-    'reqOnairType': myResult.req.onairType,
+    'reqChannel': myRequest.channel.speech,
+    'reqOnairType': myRequest.onairType,
   };
 
   // Prepare speechVars.
-  if(Object.keys(song).length != 0 && song.constructor === Object){
-    song.properties.forEach(function(property){
+  if(Object.keys(onairSong).length != 0 && onairSong.constructor === Object){
+    onairSong.properties.forEach(function(property){
       if(property.key == 'TITLE'){
         speechVars.title = property.value;
       }
@@ -354,4 +349,24 @@ function sanitizeVarsSaySong(myResult) {
   }
 
   return speechVars;
+}
+
+function getSpeechOutput(myResult) {
+  // Init vars.
+  var speechOutput = '';
+  var speechVars = myResult.res.speechVars;
+
+  // Prepare speechOutput
+  speechOutput += 'On ' + speechVars.reqChannel + '. ';
+  if (myResult.req.filter == 'song' || myResult.req.filter == 'all') {
+    speechOutput += 'The ' + speechVars.reqOnairType + ' song is ' + speechVars.title + '. ';
+  }
+  if (myResult.req.filter == 'artist' || myResult.req.filter == 'all') {
+    speechOutput += 'The artist of the ' + speechVars.reqOnairType + ' song is ' + speechVars.artist + '. ';
+  }
+  if (myResult.req.filter == 'composer' || myResult.req.filter == 'all') {
+    speechOutput += 'The composer of the ' + speechVars.reqOnairType + ' song is ' + speechVars.composer + '.';
+  }
+
+  return speechOutput;
 }

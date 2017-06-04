@@ -16,7 +16,7 @@
 		"locale": "en-US",
 		"timestamp": "2017-06-03T02:33:50Z",
 		"intent": {
-			"name": "VrtPlaylistOnairCurrentSongMnm",
+			"name": "GetLatestSongMnmIntent",
 			"slots": {}
 		}
 	},

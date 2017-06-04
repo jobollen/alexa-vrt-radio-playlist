@@ -1,5 +1,5 @@
-VrtPlaylistOnairCurrentSongStubru what is the current song on studio brussels
-VrtPlaylistOnairCurrentSongRadioOne what is the current song on radio one
-VrtPlaylistOnairCurrentSongRadioTwo what is the current song on radio two
-VrtPlaylistOnairCurrentSongKlara what is the current song on klara
-VrtPlaylistOnairCurrentSongMnm what is the current song on m and m
+GetLatestSongStubruIntent what is the current song on studio brussels
+GetLatestSongRadioOneIntent what is the current song on radio one
+GetLatestSongRadioTwoIntent what is the current song on radio two
+GetLatestSongKlaraIntent what is the current song on klara
+GetLatestSongMnmIntent what is the current song on m and m

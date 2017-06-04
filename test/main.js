@@ -15,7 +15,8 @@
 // the role must have a trusted policy with
 // "lambda.amazonaws.com" and "arn:aws:iam::<YOUR ACCOUNT ID>:user/<YOUR USER>"
 
-var roleArn = 'arn:aws:iam::<id>:role/lambda_dynamo'; // TODO replace with your AWS user id.';
+//var roleArn = 'arn:aws:iam::<id>:role/lambda_dynamo'; // TODO replace with your AWS user id.';
+var roleArn = 'arn:aws:iam::387323646340:role/lambda_dynamo';
 var region = 'eu-west-1';
 /* DO NOT MAKE CHANGE BELOW THIS */
 var AWS = require('aws-sdk');
@@ -69,7 +70,7 @@ sts.assumeRole({
       }
     };
     var lambda = require('../src/index.js');
-    var event = require('./RequestCurrentSong.json');
+    var event = require('./RequestLatestSong.json');
     lambda.handler(event, context());
   }
 });

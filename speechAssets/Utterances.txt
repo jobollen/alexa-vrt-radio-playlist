@@ -1,5 +1,29 @@
-GetLatestSongStubruIntent what is the current song on studio brussels
-GetLatestSongRadioOneIntent what is the current song on radio one
-GetLatestSongRadioTwoIntent what is the current song on radio two
-GetLatestSongKlaraIntent what is the current song on klara
-GetLatestSongMnmIntent what is the current song on m and m
+GetMnmIntent What is {onairType} {mainType} on m and m
+GetMnmIntent What is the {onairType} {mainType} on m and m
+GetMnmIntent {onairType} {mainType} on m and m
+GetMnmIntent tell me {onairType} {mainType} on m and m
+GetMnmIntent tell me the {onairType} {mainType} on m and m
+
+GetStubruIntent What is {onairType} {mainType} on studio brussel
+GetStubruIntent What is the {onairType} {mainType} on studio brussel
+GetStubruIntent {onairType} {mainType} on studio brussel
+GetStubruIntent tell me {onairType} {mainType} on studio brussel
+GetStubruIntent tell me the {onairType} {mainType} on studio brussel
+
+GetKlaraIntent What is {onairType} {mainType} on klara
+GetKlaraIntent What is the {onairType} {mainType} on klara
+GetKlaraIntent {onairType} {mainType} on klara
+GetKlaraIntent tell me {onairType} {mainType} on klara
+GetKlaraIntent tell me the {onairType} {mainType} on klara
+
+GetRadioTwoIntent What is {onairType} {mainType} on radio two
+GetRadioTwoIntent What is the {onairType} {mainType} on radio two
+GetRadioTwoIntent {onairType} {mainType} on radio two
+GetRadioTwoIntent tell me {onairType} {mainType} on radio two
+GetRadioTwoIntent tell me the {onairType} {mainType} on radio two
+
+GetRadioOneIntent What is {onairType} {mainType} on radio one
+GetRadioOneIntent What is the {onairType} {mainType} on radio one
+GetRadioOneIntent {onairType} {mainType} on radio one
+GetRadioOneIntent tell me {onairType} {mainType} on radio one
+GetRadioOneIntent tell me the {onairType} {mainType} on radio one

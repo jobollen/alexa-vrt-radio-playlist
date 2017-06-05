@@ -1,25 +1,105 @@
 {
   "intents": [
     {
-      "intent": "VrtPlaylistOnairCurrentSongStubru"
+      "intent": "AMAZON.CancelIntent"
     },
     {
-      "intent": "VrtPlaylistOnairCurrentSongRadioOne"
-    },
-    {
-      "intent": "VrtPlaylistOnairCurrentSongRadioTwo"
-    },
-    {
-      "intent": "VrtPlaylistOnairCurrentSongKlara"
-    },
-    {
-      "intent": "VrtPlaylistOnairCurrentSongMnm"
+      "intent": "AMAZON.HelpIntent"
     },
     {
       "intent": "AMAZON.PauseIntent"
     },
     {
       "intent": "AMAZON.ResumeIntent"
+    },
+    {
+      "intent": "AMAZON.StopIntent"
+    },
+    {
+      "intent": "GetNewFactIntent"
+    },
+    {
+      "slots": [
+        {
+          "name": "channel",
+          "type": "CHANNEL_LIST"
+        }
+      ],
+      "intent": "InputTestChannelIntent"
+    },
+    {
+      "slots": [
+        {
+          "name": "channel",
+          "type": "CHANNEL_LIST"
+        }
+      ],
+      "intent": "GetLatestSongIntent"
+    },
+    {
+      "slots": [
+        {
+          "name": "onairType",
+          "type": "ONAIR_TYPE_LIST"
+        },
+        {
+          "name": "mainType",
+          "type": "MAIN_TYPE_LIST"
+        }
+      ],
+      "intent": "GetMnmIntent"
+    },
+    {
+      "slots": [
+        {
+          "name": "onairType",
+          "type": "ONAIR_TYPE_LIST"
+        },
+        {
+          "name": "mainType",
+          "type": "MAIN_TYPE_LIST"
+        }
+      ],
+      "intent": "GetKlaraIntent"
+    },
+    {
+      "slots": [
+        {
+          "name": "onairType",
+          "type": "ONAIR_TYPE_LIST"
+        },
+        {
+          "name": "mainType",
+          "type": "MAIN_TYPE_LIST"
+        }
+      ],
+      "intent": "GetRadioOneIntent"
+    },
+    {
+      "slots": [
+        {
+          "name": "onairType",
+          "type": "ONAIR_TYPE_LIST"
+        },
+        {
+          "name": "mainType",
+          "type": "MAIN_TYPE_LIST"
+        }
+      ],
+      "intent": "GetRadioTwoIntent"
+    },
+    {
+      "slots": [
+        {
+          "name": "onairType",
+          "type": "ONAIR_TYPE_LIST"
+        },
+        {
+          "name": "mainType",
+          "type": "MAIN_TYPE_LIST"
+        }
+      ],
+      "intent": "GetStubruIntent"
     }
   ]
 }

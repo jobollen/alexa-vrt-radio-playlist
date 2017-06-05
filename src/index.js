@@ -17,32 +17,47 @@ const APP_ID = '';  // TODO replace with your app ID (OPTIONAL).';
 // 1. Text strings =====================================================================================================
 //    Modify these strings and messages to change the behavior of your Lambda function
 
-const vrtRadioChannel = {
+var vrtRadioChannel = {
   'mnm'   : {
     'code': 55,
-    'speech': 'M and M',
-    'value': ['mnm', 'm and m'],
+    'speech': {
+      output: 'M and M',
+      input: ['mnm', 'm and m', 'm.', 'emiem', 'radio 5', 'redio 5', 'ridio 5']
+    },
+    'label': 'MNM'
   },
   'stubru': {
     'code': 41,
-    'speech': 'Studio Brussels',
-    'value': ['stubru', 'studio brussels'],
+    'speech': {
+      output: 'Studio Brussel',
+      input: ['stubru', 'studio brussel', 'studio brussels', 'stupid', 'studio brusscls', 'studio brusscl', 'radio 4', 'redio 4', 'ridio 4']
+    },
+    'label': 'Studio Brussel'
   },
   'klara' : {
     'code': 31,
-    'speech': 'Klara',
-    'value': ['klara'],
+    'speech': {
+      output: 'Klara',
+      input: ['klara','radio 3', 'redio 3', 'ridio 3']
+    },
+    'label': 'Klara'
   },
   'radio2': {
     'code': 21,
-    'speech': 'Radio Two',
-    'value': ['radio2', 'radio two'],
+    'speech': {
+      output: 'Radio Two',
+      input: ['radio2', 'radio 2', 'radio one', 'radioone', 'redio2', 'redio 2', 'redio one', 'redioone', 'ridio to', 'redio to']
+    },
+    'label': 'Radio 2'
   },
   'radio1': {
     'code': 11,
-    'speech': 'Radio One',
-    'value': ['radio1', 'radio one'],
-  },
+    'speech': {
+      output: 'Radio One',
+      input: ['radio1', 'radio 1', 'radio one', 'radioone', 'redio1', 'redio 1' , 'ridio 1']
+    },
+    'label': 'Radio 1'
+  }
 };
 
 const vrtService = {
@@ -88,59 +103,103 @@ exports.handler = function (event, context) {
 
 const handlers = {
   'LaunchRequest': function () {
-    this.emit('GetLatestSongStubruIntent');
+    this.emit('GetKlaraIntent');
   },
-  'GetLatestSongMnmIntent': function () {
+  'InputTestChannelIntent': function () {
+    var slotChannel = isSlotValid(this.event.request, "channel");
+    var speechTest = 'The test starts in 3 seconds <break time="3s"/> <say-as interpret-as="spell-out"><prosody rate="x-slow">'+slotChannel+'</prosody></say-as>,';
+    this.emit(':tell', speechTest);
+  },
+  'InputTestOnairTypeIntent': function () {
+    var slotOnairType = isSlotValid(this.event.request, "onairType");
+    var speechTest = 'The test starts in 3 seconds <break time="3s"/> say-as interpret-as="spell-out"><prosody rate="x-slow">'+slotOnairType+'</prosody></say-as>,';
+    this.emit(':tell', speechTest);
+  },
+  'GetLatestSongIntent': function () {
+    var slotChannel = isSlotValid(this.event.request, "channel");
+    const channel = getChannel(slotChannel);
     var _this = this;
     var myRequest = {
       'service': 'playlistOnair',
-      'channel': vrtRadioChannel.mnm,
+      'channel': channel,
       'onairType': 'latest', // current, previous, latest.
-      'filter': 'song', // song, artist, composer, all.
+      'mainType': 'song', // song, artist, composer, all.
+    };
+
+    console.log(channel);
+    httpsGetVrtService(myRequest, handleVrtPlaylistOnair, _this);
+  },
+  'GetMnmIntent': function () {
+    var _this = this;
+    var serviceName = 'playlistOnair';
+    var channel = vrtRadioChannel.mnm;
+    var onairType = validateEventRequest(this.event.request, "onairType", channel, _this);
+    var mainType = validateEventRequest(this.event.request, "mainType", channel, _this);
+    var myRequest = {
+      'service': serviceName,
+      'channel': channel,
+      'onairType': onairType, // current, previous, latest.
+      'mainType': mainType, // song, artist, composer, all.
     };
 
     httpsGetVrtService(myRequest, handleVrtPlaylistOnair, _this);
   },
-  'GetLatestSongStubruIntent': function () {
+  'GetStubruIntent': function () {
     var _this = this;
+    var serviceName = 'playlistOnair';
+    var channel = vrtRadioChannel.stubru;
+    var onairType = validateEventRequest(this.event.request, "onairType", channel, _this);
+    var mainType = validateEventRequest(this.event.request, "mainType", channel, _this);
     var myRequest = {
-      'service': 'playlistOnair',
-      'channel': vrtRadioChannel.stubru,
-      'onairType': 'latest', // current, previous, latest.
-      'filter': 'song', // song, artist, composer, all.
+      'service': serviceName,
+      'channel': channel,
+      'onairType': onairType, // current, previous, latest.
+      'mainType': mainType, // song, artist, composer, all.
     };
 
     httpsGetVrtService(myRequest, handleVrtPlaylistOnair, _this);
   },
-  'GetLatestSongKlaraIntent': function () {
+  'GetKlaraIntent': function () {
     var _this = this;
+    var serviceName = 'playlistOnair';
+    var channel = vrtRadioChannel.klara;
+    var onairType = validateEventRequest(this.event.request, "onairType", channel, _this);
+    var mainType = validateEventRequest(this.event.request, "mainType", channel, _this);
     var myRequest = {
-      'service': 'playlistOnair',
-      'channel': vrtRadioChannel.klara,
-      'onairType': 'latest', // current, previous, latest.
-      'filter': 'song', // song, artist, composer, all.
+      'service': serviceName,
+      'channel': channel,
+      'onairType': onairType, // current, previous, latest.
+      'mainType': mainType, // song, artist, composer, all.
     };
 
     httpsGetVrtService(myRequest, handleVrtPlaylistOnair, _this);
   },
-  'GetLatestSongRadioOneIntent': function () {
+  'GetRadioOneIntent': function () {
     var _this     = this;
+    var serviceName = 'playlistOnair';
+    var channel = vrtRadioChannel.stubru;
+    var onairType = validateEventRequest(this.event.request, "onairType", channel, _this);
+    var mainType = validateEventRequest(this.event.request, "mainType", channel, _this);
     var myRequest = {
-      'service': 'playlistOnair',
-      'channel': vrtRadioChannel.radio1,
-      'onairType': 'latest', // current, previous, latest.
-      'filter': 'song', // song, artist, composer, all.
+      'service': serviceName,
+      'channel': channel,
+      'onairType': onairType, // current, previous, latest.
+      'mainType': mainType, // song, artist, composer, all.
     };
 
     httpsGetVrtService(myRequest, handleVrtPlaylistOnair, _this);
   },
-  'GetLatestSongRadioTwoIntent': function () {
+  'GetRadioTwoIntent': function () {
     var _this = this;
+    var serviceName = 'playlistOnair';
+    var channel = vrtRadioChannel.radio2;
+    var onairType = validateEventRequest(this.event.request, "onairType", channel, _this);
+    var mainType = validateEventRequest(this.event.request, "mainType", channel, _this);
     var myRequest = {
-      'service': 'playlistOnair',
-      'channel': vrtRadioChannel.radio2,
-      'onairType': 'latest', // current, previous, latest.
-      'filter': 'song', // song, artist, composer, all.
+      'service': serviceName,
+      'channel': channel,
+      'onairType': onairType, // current, previous, latest.
+      'mainType': mainType, // song, artist, composer, all.
     };
 
     httpsGetVrtService(myRequest, handleVrtPlaylistOnair, _this);
@@ -166,12 +225,13 @@ var https = require('https');
 // 3.2. Helper Callback functions ======================================================================================
 
 var handleVrtPlaylistOnair = function(onairData, myRequest, handlerObject) {
-  var onairSong = getVrtOnairSong(onairData, myRequest.onairType);
-  var speechVars = getSpeechVarsVrtOnairSong(myRequest, onairSong);
+  var onairDataJson = JSON.parse(onairData);
+  var onairSongData = getVrtOnairSong(onairDataJson, myRequest.onairType);
+  var speechVars = getSpeechVarsVrtOnairSong(myRequest, onairSongData);
   var myResult = {
     'req': myRequest,
     'res': {
-      'song': onairSong,
+      'song': onairSongData,
       'speechVars': speechVars,
     }
   };
@@ -186,36 +246,89 @@ var handleVrtPlaylistOnair = function(onairData, myRequest, handlerObject) {
   console.log('--- handleVrtPlaylistOnair END ---\n');
 
   // Tell Alexa what to emit.
-  handlerObject.emit(':tellWithCard', speechOutput, 'VRT Playlist onair of ' + myRequest.channel.value[0], speechOutput);
+  handlerObject.emit(':tellWithCard', speechOutput, 'VRT Playlist onair of ' + myRequest.channel.label, speechOutput);
 };
 
 // 3.3. Helper functions ================================================================================================
 
+function validateEventRequest(EventRequest, EventRequestName, channel, handlerObject) {
+  var slotOnairType = isSlotValid(EventRequest, EventRequestName);
+  if (slotOnairType) {
+    return slotOnairType;
+  } else {
+    var speechTest = 'The ' + EventRequestName + ' was invalid. Please ask, ...';
+    handlerObject.emit(':tell', speechTest);
+  }
+}
+function isSlotValid(request, slotName){
+  var slot = request.intent.slots[slotName];
+  //console.log("request = "+JSON.stringify(request)); //uncomment if you want to see the request
+  var slotValue;
+
+  console.log(JSON.stringify(request.intent.slots));
+  console.log(slot.value);
+  //if we have a slot, get the text and store it into speechOutput
+  if (slot && slot.value) {
+    //we have a value in the slot
+    slotValue = slot.value.toLowerCase();
+    return slotValue;
+  } else {
+    //we didn't get a value in the slot.
+    return false;
+  }
+}
+
+function getChannel(searchValue) {
+  var hay = vrtRadioChannel;
+
+  for(var attributeName in hay){
+    //console.log(attributeName+": " + JSON.stringify(hay[attributeName]));
+    if (hay[attributeName].speech.input.indexOf(searchValue) > -1) {
+      return hay[attributeName];
+    }
+  }
+}
+
 function httpsGetVrtService(myRequest, callback, handlerObject) {
   var onairData = "";
 
-  var service = null;
-  
-  if (typeof myRequest.service != 'undefined' && myRequest.service == 'playlistOnair') {
-    // Add filter to request.
-    vrtService.playlistOnair.path = vrtService.playlistOnair.path + '?channel_code=' + myRequest.channel.code;
+  var tmpService = {};
 
-    // Set service.
-    service = vrtService.playlistOnair;
+  if (typeof myRequest.service != 'undefined' && myRequest.service == 'playlistOnair') {
+      tmpService = Object.assign({}, vrtService.playlistOnair);
+      // Add filter to request.
+      tmpService.path += '?channel_code=' + myRequest.channel.code;
   }
 
-  if (service != null) {
+  if (Object.keys(tmpService).length != 0 && tmpService.constructor === Object) {
     // Handle HTTPS request.
-    var req = https.request(service, function(res) {
-      res.setEncoding('utf8');
-      res.on('data', function(dataChunk) {
-        onairData += dataChunk;
+    var httpsPromise = new Promise( function(resolve, reject){
+      var req = https.request(tmpService, function(res) {
+        res.setEncoding('utf8');
+        res.on('data', function(dataChunk) {
+          onairData += dataChunk;
+        });
+        res.on('end', function() {
+          resolve(onairData);
+        });
       });
-      res.on('end', function() {
-        callback(onairData, myRequest, handlerObject);
+      req.on('error', function(e) {
+        console.error('ERROR "https.request()"', e);
+        reject(e);
       });
+      req.end();
     });
-    req.end();
+    httpsPromise.then(
+      function (data) {
+        callback(data, myRequest, handlerObject);
+      },
+      function (err) {
+        console.error('ERROR "httpsPromise rejected https.request()":', err);
+      }
+    ).catch(function (err) {
+      console.error('ERROR "httpsPromise error in callback())"', err);
+    });
+
   }
   else {
     if (typeof myRequest.service == 'undefined') {
@@ -228,19 +341,21 @@ function httpsGetVrtService(myRequest, callback, handlerObject) {
 };
 
 function getVrtOnairSong(onairData, requestedOnairType) {
-  var onairDataJson = JSON.parse(onairData);
   var onairSong = {};
 
   if (requestedOnairType.toLowerCase() == 'current') {
-    onairSong = getVrtOnairSongByType(onairDataJson, 'NOW');
+    onairSong = getVrtOnairSongByType(onairData, 'NOW');
   }
   else if (requestedOnairType.toLowerCase() == 'previous') {
-    onairSong = getVrtOnairSongByType(onairDataJson, 'PREVIOUS');
+    onairSong = getVrtOnairSongByType(onairData, 'PREVIOUS');
+  }
+  else if (requestedOnairType.toLowerCase() == 'next') {
+    onairSong = getVrtOnairSongByType(onairData, 'NEXT');
   }
   else if (requestedOnairType.toLowerCase() == 'latest') {
-    onairSong = getVrtOnairSongByType(onairDataJson, 'NOW');
+    onairSong = getVrtOnairSongByType(onairData, 'NOW');
     if (Object.keys(onairSong).length === 0 && onairSong.constructor === Object) {
-      onairSong = getVrtOnairSongByType(onairDataJson, 'PREVIOUS');
+      onairSong = getVrtOnairSongByType(onairData, 'PREVIOUS');
     }
   }
   else {
@@ -250,9 +365,9 @@ function getVrtOnairSong(onairData, requestedOnairType) {
   return onairSong;
 }
 
-function getVrtOnairSongByType(onairDataJson, onairType) {
+function getVrtOnairSongByType(onairData, onairType) {
   var onairSong = {};
-  onairDataJson.onairs.forEach(function(element){
+  onairData.onairs.forEach(function(element){
     if(element.onairType == onairType) {
       onairSong = element;
     }
@@ -266,7 +381,7 @@ function getSpeechVarsVrtOnairSong(myRequest, onairSong) {
     'title': 'Not available',
     'artist': 'Not available',
     'composer': 'Not available',
-    'reqChannel': myRequest.channel.speech,
+    'reqChannel': myRequest.channel.speech.output,
     'reqOnairType': myRequest.onairType,
   };
 
@@ -295,24 +410,24 @@ function getSpeechOutput(myResult) {
 
   // Prepare speechOutput
   speechOutput += 'On ' + speechVars.reqChannel + '. ';
-  if (myResult.req.filter == 'song' || myResult.req.filter == 'all') {
-    if (myResult.req.filter == 'all') {
+  if (myResult.req.mainType == 'song' || myResult.req.mainType == 'all') {
+    if (myResult.req.mainType == 'all') {
       speechOutput += 'The ' + speechVars.reqOnairType + ' song is ' + speechVars.title + ' ';
     }
     else {
       speechOutput += 'The ' + speechVars.reqOnairType + ' song is ' + speechVars.title + ' played by ' + speechVars.artist + '.';
     }
   }
-  if (myResult.req.filter == 'artist' || myResult.req.filter == 'all') {
-    if (myResult.req.filter == 'all') {
+  if (myResult.req.mainType == 'artist' || myResult.req.mainType == 'all') {
+    if (myResult.req.mainType == 'all') {
       speechOutput += 'played by ' + speechVars.artist + '. ';
     }
     else {
       speechOutput += 'The artist of the ' + speechVars.reqOnairType + ' song is ' + speechVars.artist + '. ';
     }
   }
-  if (myResult.req.filter == 'composer' || myResult.req.filter == 'all') {
-    if (myResult.req.filter == 'all') {
+  if (myResult.req.mainType == 'composer' || myResult.req.mainType == 'all') {
+    if (myResult.req.mainType == 'all') {
       speechOutput += 'And the composer is ' + speechVars.composer + '. ';
     }
     else {

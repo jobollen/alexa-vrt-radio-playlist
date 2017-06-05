@@ -5,11 +5,13 @@ During a Hackathon on the VRT (Flemish Radio and Television Broadcasting Organiz
 
 We created an Amazon Alexa nodejs Skill.
 
-The purpose was to create a skill that returns the CURRENT song, artist and composer
+The purpose was to create a skill that returns the CURRENT, PREVIOUS, NEXT, LATEST song, artist and composer
 of a Radio station.
 
 ```bash
-Alexa ask GIJOE what is the current song on studio brussels.
+Alexa ask radioplayer what is the current song on studio brussel.
+Alexa ask radioplayer what is the previous artist on studio brussel.
+Alexa ask radioplayer what is the latest composer on studio brussel.
 ```
 
 1. We started the development with the following resources.
